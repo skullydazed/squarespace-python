@@ -60,18 +60,19 @@ class Squarespace(object):
         elif request.status_code == 204:
             return True
         elif request.status_code == 401:
-            raise ValueError('The API key %s is not valid.' % self.api_key)
+            raise ValueError('The API key %s is not valid.', self.api_key)
         elif 200 < request.status_code < 299:
-            logging.warning('Squarespace success response %s:' % request.status_code)
+            logging.warning('Squarespace success response %s:', request.status_code)
             logging.warning(request.text)
             raise NotImplementedError("Squarespace sent us a success response we're not prepared for!")
-        elif 400 <= request.status_code < 499:
-            logging.error('Squarespace error response %s:' % request.status_code)
-            logging.error(request.text)
+
+        logging.error('Squarespace error response %s:', request.status_code)
+        logging.error('URL: %s', request.url)
+        logging.error(request.text)
+
+        if 400 <= request.status_code < 499:
             raise RuntimeError("Squarespace thinks this request is bogus")
-        elif 500 <= request.status_code < 599:
-            logging.error('Squarespace error response %s:' % request.status_code)
-            logging.error(request.text)
+        if 500 <= request.status_code < 599:
             raise RuntimeError("Squarespace is having problems, try later.")
 
         raise RuntimeError("An unknown error occurred fetching your request.")
