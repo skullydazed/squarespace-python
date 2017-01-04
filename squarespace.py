@@ -1,9 +1,11 @@
 import logging
 import requests
 
+
 __VERSION__ = '0.0.1'
 api_baseurl = 'https://api.squarespace.com'
 api_version = '0.1'
+
 
 class Squarespace(object):
     """Represents orders from a particular squarespace store.
@@ -50,7 +52,7 @@ class Squarespace(object):
             args = {}
 
         url = '%s/%s/%s' % (self.api_baseurl, self.api_version, path)
-        print(url, args)
+        logging.debug('url:%s args:%s', url, args)
         request = self.http.get(url, params=args)
 
         if request.status_code in [200, 201]:
@@ -74,6 +76,11 @@ class Squarespace(object):
 
         raise RuntimeError("An unknown error occurred fetching your request.")
 
+    def order(self, order_id):
+        """Retrieve a single order.
+        """
+        return self.get('commerce/orders/' + order_id)
+
     def orders(self, **args):
         """Retrieve the 20 latest orders, by modification date.
         """
@@ -84,12 +91,16 @@ class Squarespace(object):
 
         return result['result']
 
+    def next_page(self):
+        """Retrieve the next 20 orders, or None if there are no more orders.
+        """
+        return self.orders(cursor=self._next_page) if self._next_page else None
+
     def all_orders(self):
         orders = self.orders()
-        while self._next_page:
-            orders.extend(self.orders(cursor=self._next_page))
 
-    def order(self, order_id):
-        """Retrieve a single order.
-        """
-        return self.get('commerce/orders/' + order_id)
+        while self._next_page:
+            orders.extend(self.next_page())
+
+        return orders
+
