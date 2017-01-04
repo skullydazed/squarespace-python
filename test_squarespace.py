@@ -5,7 +5,7 @@ from squarespace import Squarespace
 def test_squarespace():
     store = Squarespace('test')
     assert store.api_key == 'test'
-    assert store.useragent == 'Squarespace python API v0.0.1 by Zach White.'
+    assert store.useragent == 'Squarespace python API v0.0.2 by Zach White.'
 
 
 def test_squarespace_useragent():
