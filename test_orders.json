@@ -1,0 +1,81 @@
+{
+  "result" : [ {
+    "id" : "b1512ba21f01ab0292f0e00a",
+    "orderNumber" : "1",
+    "createdOn" : "2017-01-01T12:55:07.400Z",
+    "modifiedOn" : "2017-01-01T12:55:07.400Z",
+    "testmode" : false,
+    "customerEmail" : "customer@example.com",
+    "billingAddress" : {
+      "firstName" : "Customer",
+      "lastName" : "Person",
+      "address1" : "1234 North Street Av.",
+      "address2" : null,
+      "city" : "Santa Cruz",
+      "state" : "CA",
+      "countryCode" : "US",
+      "postalCode" : "95060"
+    },
+    "shippingAddress" : {
+      "firstName" : "Customer",
+      "lastName" : "Person",
+      "address1" : "1234 North Street Av.",
+      "address2" : null,
+      "city" : "Santa Cruz",
+      "state" : "CA",
+      "countryCode" : "US",
+      "postalCode" : "95060"
+    },
+    "fulfillmentStatus" : "PENDING",
+    "lineItems" : [ {
+      "id" : "5868fa8b44024318a076dd0d",
+      "sku" : "cherry_pcb_stab",
+      "productId" : "58434e2ac534a57dbde60129",
+      "productName" : "PCB Mount Cherry-style stabilizers",
+      "quantity" : 1,
+      "unitPricePaid" : {
+        "value" : "9.99",
+        "currency" : "USD"
+      },
+      "variantOptions" : [ ],
+      "customizations" : null
+    } ],
+    "shippingLines" : [ {
+      "method" : "Priority",
+      "amount" : {
+        "value" : "4.00",
+        "currency" : "USD"
+      }
+    } ],
+    "discountLines" : [ ],
+    "formSubmission" : null,
+    "fulfillments" : [ ],
+    "subtotal" : {
+      "value" : "9.99",
+      "currency" : "USD"
+    },
+    "shippingTotal" : {
+      "value" : "4.00",
+      "currency" : "USD"
+    },
+    "discountTotal" : {
+      "value" : "0.00",
+      "currency" : "USD"
+    },
+    "taxTotal" : {
+      "value" : "0.00",
+      "currency" : "USD"
+    },
+    "refundedTotal" : {
+      "value" : "0.00",
+      "currency" : "USD"
+    },
+    "grandTotal" : {
+      "value" : "13.99",
+      "currency" : "USD"
+    }
+  } ],
+  "pagination" : {
+    "hasNextPage" : false
+  }
+}
