@@ -2,7 +2,7 @@ import logging
 import requests
 
 
-__VERSION__ = '0.0.2'
+__VERSION__ = '0.0.3'
 api_baseurl = 'https://api.squarespace.com'
 api_version = '0.1'
 
