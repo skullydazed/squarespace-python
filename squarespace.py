@@ -31,6 +31,9 @@ class Squarespace(object):
         self.http.headers.update({'Authorization': 'Bearer ' + self.api_key})
         self.useragent = 'Squarespace python API v%s by Zach White.' % __VERSION__
         self._next_page = None
+        self.max_pages = 20  # How many pages worth of orders to fetch.
+                             # If you need to fetch more than 100 orders you'll
+                             # have to increase this
 
     @property
     def useragent(self):
@@ -100,8 +103,13 @@ class Squarespace(object):
     def all_orders(self):
         orders = self.orders()
 
+        count = 0
         while self._next_page:
+            count += 1
             orders.extend(self.next_page())
+            if count >= self.max_pages:
+                logging.warning('%s.all_orders: max_pages (%s) hit.', self.__class__.__name__, self.max_pages)
+                break
 
         return orders
 
