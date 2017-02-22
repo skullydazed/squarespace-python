@@ -31,9 +31,34 @@ def test_squarespace_api_pagination():
 
     store = Squarespace(api_key)
     orders = store.orders()
-    assert len(orders) == 20
+    assert len(orders) == 50
     next = store.next_page()
     assert len(next) > 0
     assert orders[0]['id'] != orders[1]['id']
     return True
 
+def test_squarespace_api_fulfillment():
+    """Test fulfillment. This requires both an `api_key` and an `order_info`
+    file.
+
+    `api_key`:
+        A file containing only the squarespace API key.
+
+    `order_info`:
+        A file containing a single line consisting of:
+        `order_id`,`tracking_number`
+    """
+    open_order = open('order_info').read().strip() if exists('order_info') else None
+
+    if not api_key:
+        logging.warning('Missing "api_key" file.')
+        return True
+
+    if not open_order:
+        logging.warning('Missing "order_info" file.')
+        return True
+
+    order_id, tracking_number = open_order.split(',', 2)
+
+    store = Squarespace(api_key)
+    return store.fulfill(order_id, tracking_number, 'USPS', 'First Class')
