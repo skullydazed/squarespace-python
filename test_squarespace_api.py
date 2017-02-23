@@ -46,7 +46,7 @@ def test_squarespace_api_fulfillment():
 
     `order_info`:
         A file containing a single line consisting of:
-        `order_id`,`tracking_number`
+        `order_number`,`tracking_number`
     """
     open_order = open('order_info').read().strip() if exists('order_info') else None
 
@@ -58,7 +58,9 @@ def test_squarespace_api_fulfillment():
         logging.warning('Missing "order_info" file.')
         return True
 
-    order_id, tracking_number = open_order.split(',', 2)
+    order_number, tracking_number = open_order.split(',', 2)
 
     store = Squarespace(api_key)
-    return store.fulfill(order_id, tracking_number, 'USPS', 'First Class')
+    order = store.order(order_number=order_number)
+
+    return store.fulfill(order['id'], tracking_number, 'USPS', 'First Class')

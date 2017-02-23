@@ -9,6 +9,10 @@ api_baseurl = 'https://api.squarespace.com'
 api_version = '0.1'
 
 
+class SquarespaceError(Exception):
+    pass
+
+
 class Squarespace(object):
     """Represents orders from a particular squarespace store.
 
@@ -96,10 +100,17 @@ class Squarespace(object):
 
         raise RuntimeError("An unknown error occurred fetching your request.")
 
-    def order(self, order_id):
+    def order(self, order_id=None, order_number=None):
         """Retrieve a single order.
         """
-        return self.get('commerce/orders/' + order_id)
+        if order_id:
+            return self.get('commerce/orders/' + order_id)
+        elif order_number:
+            for order in self.all_orders():
+                if order['orderNumber'] == order_number:
+                    return order
+        else:
+            raise SquarespaceError('You must specify one of `order_id` or `order_number`')
 
     def orders(self, **args):
         """Retrieve the 20 latest orders, by modification date.
@@ -142,7 +153,7 @@ class Squarespace(object):
         if not tracking_baseurl:
             tracking_baseurl = self.tracking_baseurl
 
-        uri = 'orders/%s/fulfillments' % order_id
+        uri = 'commerce/orders/%s/fulfillments' % order_id
         fulfillment = {
             "shouldSendNotification": True,
             "shipments": [
