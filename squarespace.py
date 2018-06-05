@@ -141,7 +141,7 @@ class Squarespace(object):
                 logging.warning('%s.all_orders: max_pages (%s) hit.', self.__class__.__name__, self.max_pages)
                 break
 
-    def fulfill(self, order_id, tracking_number, carrier_name, service_name, tracking_baseurl=None):
+    def fulfill(self, order_id, tracking_number, carrier_name, service_name, tracking_baseurl=None, send_notification=True):
         """Mark an order as shipped.
 
         :param tracking_number:
@@ -156,7 +156,7 @@ class Squarespace(object):
 
         uri = 'commerce/orders/%s/fulfillments' % order_id
         fulfillment = {
-            "shouldSendNotification": True,
+            "shouldSendNotification": send_notification,
             "shipments": [
                 {
                     'shipDate': strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()),
