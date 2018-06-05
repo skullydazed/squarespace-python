@@ -129,16 +129,17 @@ class Squarespace(object):
 
     def all_orders(self):
         orders = self.orders()
+        for order in orders:
+            yield order
 
         count = 0
         while self._next_page:
             count += 1
-            orders.extend(self.next_page())
+            for order in self.next_page():
+                yield order
             if count >= self.max_pages:
                 logging.warning('%s.all_orders: max_pages (%s) hit.', self.__class__.__name__, self.max_pages)
                 break
-
-        return orders
 
     def fulfill(self, order_id, tracking_number, carrier_name, service_name, tracking_baseurl=None):
         """Mark an order as shipped.
