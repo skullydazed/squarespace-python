@@ -14,13 +14,13 @@ def read(*paths):
 
 setup(
     name='squarespace',
-    version='0.0.3',
+    version='0.0.4',
     description='Library to access the Squarespace Commerce API.',
     long_description='\n\n'.join((read('README.md'), read('AUTHORS.md'))),
     url='https://github.com/skullydazed/squarespace-python',
     license='MIT',
-    author='skullY',
-    author_email='skullydazed@gmail.com',
+    author='skullY + Evan',
+    author_email='skullydazed@gmail.com, esarmien@snkattck.co',
     install_requires=['requests'],
     py_modules=['squarespace'],
     include_package_data=True,
