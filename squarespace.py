@@ -151,7 +151,8 @@ class Squarespace(object):
         uri = 'commerce/orders/%s/fulfillments' % order_id
 
         fulfillment = {
-            "shouldSendNotification": send_notification
+            "shouldSendNotification": send_notification,
+            "shipments": []
         }
 
         if tracking_number and carrier_name and service_name:
