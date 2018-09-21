@@ -135,7 +135,7 @@ class Squarespace(object):
             for order in self.next_page():
                 yield order
 
-    def fulfill(self, order_id, tracking_number, carrier_name, service_name, tracking_baseurl=None, send_notification=True):
+    def fulfill(self, order_id, tracking_number=None, carrier_name=None, service_name=None, tracking_baseurl=None, send_notification=True):
         """Mark an order as shipped.
 
         :param tracking_number:
@@ -149,9 +149,13 @@ class Squarespace(object):
             tracking_baseurl = self.tracking_baseurl
 
         uri = 'commerce/orders/%s/fulfillments' % order_id
+
         fulfillment = {
-            "shouldSendNotification": send_notification,
-            "shipments": [
+            "shouldSendNotification": send_notification
+        }
+
+        if tracking_number and carrier_name and service_name:
+            fulfillment["shipments"] = [
                 {
                     'shipDate': strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()),
                     "carrierName": carrier_name,
@@ -160,6 +164,5 @@ class Squarespace(object):
                     "trackingUrl": tracking_baseurl + tracking_number
                 }
             ]
-        }
 
         return self.post(uri, fulfillment)

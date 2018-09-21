@@ -14,7 +14,7 @@ def read(*paths):
 
 setup(
     name='squarespace',
-    version='0.0.4',
+    version='0.0.5',
     description='Library to access the Squarespace Commerce API.',
     long_description='\n\n'.join((read('README.md'), read('AUTHORS.md'))),
     url='https://github.com/skullydazed/squarespace-python',
