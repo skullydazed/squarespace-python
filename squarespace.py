@@ -4,9 +4,9 @@ from time import strftime, gmtime
 import requests
 
 
-__VERSION__ = '0.0.3'
+__VERSION__ = '0.0.4'
 api_baseurl = 'https://api.squarespace.com'
-api_version = '0.1'
+api_version = '1.0'
 
 
 class SquarespaceError(Exception):
@@ -38,9 +38,6 @@ class Squarespace(object):
         self.http.headers.update({'Authorization': 'Bearer ' + self.api_key})
         self.useragent = 'Squarespace python API v%s by Zach White.' % __VERSION__
         self._next_page = None
-        self.max_pages = 20  # How many pages worth of orders to fetch.
-                             # If you need to fetch more than 100 orders you'll
-                             # have to increase this
 
     @property
     def useragent(self):
@@ -127,8 +124,8 @@ class Squarespace(object):
         """
         return self.orders(cursor=self._next_page) if self._next_page else None
 
-    def all_orders(self):
-        orders = self.orders()
+    def all_orders(self, **args):
+        orders = self.orders(**args)
         for order in orders:
             yield order
 
@@ -137,11 +134,8 @@ class Squarespace(object):
             count += 1
             for order in self.next_page():
                 yield order
-            if count >= self.max_pages:
-                logging.warning('%s.all_orders: max_pages (%s) hit.', self.__class__.__name__, self.max_pages)
-                break
 
-    def fulfill(self, order_id, tracking_number, carrier_name, service_name, tracking_baseurl=None, send_notification=True):
+    def fulfill(self, order_id, tracking_number=None, carrier_name=None, service_name=None, tracking_baseurl=None, send_notification=True):
         """Mark an order as shipped.
 
         :param tracking_number:
@@ -155,9 +149,14 @@ class Squarespace(object):
             tracking_baseurl = self.tracking_baseurl
 
         uri = 'commerce/orders/%s/fulfillments' % order_id
+
         fulfillment = {
             "shouldSendNotification": send_notification,
-            "shipments": [
+            "shipments": []
+        }
+
+        if tracking_number and carrier_name and service_name:
+            fulfillment["shipments"] = [
                 {
                     'shipDate': strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()),
                     "carrierName": carrier_name,
@@ -166,6 +165,5 @@ class Squarespace(object):
                     "trackingUrl": tracking_baseurl + tracking_number
                 }
             ]
-        }
 
         return self.post(uri, fulfillment)
